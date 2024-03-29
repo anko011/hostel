@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
-import { TokenService } from 'src/auth/application/shared';
+import { TokenService } from '@/auth/application/shared/token';
 import { UsersRepository } from '@/users/application/ports/persistence';
 
 import { RefreshCommand } from './refresh.command';

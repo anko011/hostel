@@ -1,1 +1,1 @@
-export { AuthPersistenceModule } from './auth-persistence.module';
+export { TokenPersistenceModule } from './token-persistence.module';

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 
 import { HashModule } from '@app/hash';
 
@@ -10,12 +9,8 @@ import {
   SignInCommandHandler,
   SignUpCommandHandler,
 } from '@/auth/application/commands';
-import { TokenModule } from 'src/auth/application/shared';
-import { TokenConfig } from '@/auth/application/configs/';
-
-import { AuthPersistenceModule } from '@/auth/infrastructure/persistence/';
-
-import { AuthHttpModule } from '@/auth/presentation/http/';
+import { TokenModule } from '@/auth/application/shared';
+import { AuthHttpModule } from '@/auth/presentation/http';
 
 const handlers = [
   SignUpCommandHandler,
@@ -23,15 +18,13 @@ const handlers = [
   RefreshCommandHandler,
 ];
 
-@Module({
-  imports: [
-    ConfigModule.forFeature(TokenConfig),
-    HashModule,
-    UsersModule,
-    AuthPersistenceModule.use('in-memory'),
-    AuthHttpModule,
-    TokenModule,
-  ],
-  providers: [...handlers],
-})
-export class AuthModule {}
+@Module({})
+export class AuthModule {
+  static forRoot() {
+    return {
+      module: AuthModule,
+      imports: [HashModule, UsersModule, TokenModule, AuthHttpModule],
+      providers: [...handlers],
+    };
+  }
+}

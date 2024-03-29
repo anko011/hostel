@@ -1,11 +1,13 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SignInCommand } from '@/auth/application/commands/sign-in.command';
 import { Logger } from '@nestjs/common';
-import { UsersRepository } from '@/users/application/ports/persistence/users.repository';
-import { IncorrectCredentialsException } from '@/auth/application/exceptions';
 import { HashService } from '@app/hash';
-import { TokenService } from 'src/auth/application/shared';
-import { TokensRepository } from '@/auth/application/ports/persistence';
+
+import { UsersRepository } from '@/users/application/ports/persistence/users.repository';
+
+import { TokenService } from '@/auth/application/shared/token';
+import { IncorrectCredentialsException } from '@/auth/application/exceptions';
+
+import { SignInCommand } from './sign-in.command';
 
 @CommandHandler(SignInCommand)
 export class SignInCommandHandler implements ICommandHandler<SignInCommand> {
@@ -15,7 +17,6 @@ export class SignInCommandHandler implements ICommandHandler<SignInCommand> {
     private readonly usersRepository: UsersRepository,
     private readonly hashService: HashService,
     private readonly tokenService: TokenService,
-    private readonly tokenRepository: TokensRepository,
   ) {}
 
   async execute(command: SignInCommand): Promise<any> {

@@ -11,7 +11,7 @@ import { RolesModule } from '@/roles/';
   imports: [
     ConfigModule.forRoot(),
     CqrsModule.forRoot(),
-    AuthModule,
+    AuthModule.forRoot(),
     UsersModule,
     BookingsModule,
     RolesModule,

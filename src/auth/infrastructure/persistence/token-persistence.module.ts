@@ -3,13 +3,13 @@ import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { InMemoryModule } from '@/auth/infrastructure/persistence/in-memory-token-adapter/in-memory.module';
 
 @Module({})
-export class AuthPersistenceModule {
-  private static readonly logger = new Logger(AuthPersistenceModule.name);
+export class TokenPersistenceModule {
+  private static readonly logger = new Logger(TokenPersistenceModule.name);
 
   static use(driver: 'in-memory' | 'redis'): DynamicModule {
-    AuthPersistenceModule.logger.log(`Started with driver: ${driver}`);
+    TokenPersistenceModule.logger.log(`Started with driver: ${driver}`);
     return {
-      module: AuthPersistenceModule,
+      module: TokenPersistenceModule,
       imports: [InMemoryModule],
       exports: [InMemoryModule],
     };
