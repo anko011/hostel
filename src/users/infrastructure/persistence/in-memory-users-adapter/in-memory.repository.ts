@@ -28,7 +28,7 @@ export class InMemoryRepository implements UsersRepository {
     return existing;
   }
 
-  async delete(id: User['id']): Promise<void> {
+  async remove(id: User['id']): Promise<void> {
     const existingUser = await this.findOneById(id);
     if (!existingUser)
       throw new NotExistUserException(`User with id: ${id} is not exists`);

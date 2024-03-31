@@ -22,11 +22,7 @@ const handlers = [
 ];
 
 @Module({
-  imports: [
-    UsersPersistenceModule.use('in-memory'),
-    UsersHttpModule,
-    HashModule,
-  ],
+  imports: [UsersPersistenceModule.use('db'), UsersHttpModule, HashModule],
   providers: [UserFactory, ...handlers],
   exports: [UserFactory, UsersPersistenceModule],
 })

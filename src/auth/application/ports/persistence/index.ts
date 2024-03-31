@@ -1,1 +1,1 @@
-export { TokensRepository } from './tokens.repository';
+export { TokenRepository } from './token.repository';

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
 import { SavedRefreshToken } from '@/auth/application/entities';
-import { TokensRepository } from '@/auth/application/ports/persistence/';
+import { TokenRepository } from '@/auth/application/ports/persistence/';
 import { NotExistsTokenException } from '@/auth/application/exceptions/';
 
 @Injectable()
-export class InMemoryRepository implements TokensRepository {
+export class InMemoryRepository implements TokenRepository {
   private tokens: SavedRefreshToken[] = [];
 
   async save(token: SavedRefreshToken): Promise<SavedRefreshToken> {

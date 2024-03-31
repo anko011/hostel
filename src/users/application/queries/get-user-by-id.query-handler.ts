@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { User } from '@/users/application/entities/';
-import { UsersRepository } from '@/users/application/ports/persistence';
+import { ReadUserRepository } from '@/users/application/ports/persistence';
 
 import { GetUserByIdQuery } from './get-user-by-id.query';
 
@@ -12,7 +12,7 @@ export class GetUserByIdQueryHandler
 {
   private readonly logger = new Logger(GetUserByIdQueryHandler.name);
 
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly usersRepository: ReadUserRepository) {}
 
   execute(query: GetUserByIdQuery): Promise<User | null> {
     this.logger.log(`Process with query: ${JSON.stringify(query)}`);

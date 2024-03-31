@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { InMemoryRepository } from './in-memory.repository';
-import { TokensRepository } from '@/auth/application/ports/persistence';
+import { TokenRepository } from '@/auth/application/ports/persistence';
 
 @Module({
   providers: [
     InMemoryRepository,
     {
-      provide: TokensRepository,
+      provide: TokenRepository,
       useClass: InMemoryRepository,
     },
   ],
-  exports: [TokensRepository],
+  exports: [TokenRepository],
 })
 export class InMemoryModule {}

@@ -42,7 +42,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
-    "@nestjs/testing": "^10.0.0",
+    "@nestjs/testing": "^10.3.7",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
@@ -89,7 +89,12 @@
       "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1",
       "^@app/hash(|/.*)$": "<rootDir>/libs/hash/src/$1",
       "^@app/joi-utils(|/.*)$": "<rootDir>/libs/joi-utils/src/$1",
-      "^@app/token(|/.*)$": "<rootDir>/libs/token/src/$1"
-    }
+      "^@app/token(|/.*)$": "<rootDir>/libs/token/src/$1",
+      "@/(.*)": "<rootDir>/src/$1"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
   }
 }

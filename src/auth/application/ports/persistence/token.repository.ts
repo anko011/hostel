@@ -1,6 +1,6 @@
 import { SavedRefreshToken } from '@/auth/application/entities/';
 
-export abstract class TokensRepository {
+export abstract class TokenRepository {
   abstract save(token: SavedRefreshToken): Promise<SavedRefreshToken>;
 
   abstract remove(token: string): Promise<void>;
