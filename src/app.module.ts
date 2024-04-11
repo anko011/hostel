@@ -1,20 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
-import { ConfigModule } from '@nestjs/config';
 
+import { CoreModule } from '@/core/';
 import { UsersModule } from '@/users/';
-import { AuthModule } from '@/auth/';
-import { BookingsModule } from '@/bookings/';
-import { RolesModule } from '@/roles/';
+import { BookingsModule } from '@/bookings';
+import { AuthModule } from '@/auth';
+import { RolesModule } from '@/roles';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    CqrsModule.forRoot(),
-    AuthModule.forRoot(),
-    UsersModule,
-    BookingsModule,
-    RolesModule,
-  ],
+  imports: [CoreModule, UsersModule, BookingsModule, AuthModule, RolesModule],
 })
 export class AppModule {}

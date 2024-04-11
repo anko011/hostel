@@ -1,8 +1,8 @@
-import { TokenRepository } from '@/auth/application/ports/persistence';
+import { ITokenRepository } from '@/auth/application/ports/persistence';
 import { SavedRefreshToken } from '@/auth/application/entities';
 import { NotExistsTokenException } from '@/auth/application/exceptions';
 
-export const test = (repository: TokenRepository) => {
+export const test = (repository: ITokenRepository) => {
   describe('InMemoryTokenRepositoryAdapter', () => {
     const mock: SavedRefreshToken = {
       userId: '123',

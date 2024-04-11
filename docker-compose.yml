@@ -5,21 +5,85 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     environment:
-      DB_HOST: postgres
-    depends_on:
-      - postgres
+      IN_MEMORY: false
 
-  postgres:
-    container_name: postgres
-    image: postgres
+      SERVER_PORT: ${SERVER_PORT}
+
+      TOKEN_SECRET: ${TOKEN_SECRET}
+      ACCESS_TOKEN_TTL_SEC: ${ACCESS_TOKEN_TTL_SEC}
+      REFRESH_TOKEN_TTL_SEC: ${REFRESH_TOKEN_TTL_SEC}
+
+      READ_DB_HOST: slave
+      READ_DB_PORT: ${READ_DB_PORT}
+      READ_DB_USERNAME: ${READ_DB_USERNAME}
+      READ_DB_PASSWORD: ${READ_DB_PASSWORD}
+      READ_DB_NAME: ${READ_DB_NAME}
+
+      WRITE_DB_HOST: master
+      WRITE_DB_PORT: ${WRITE_DB_PORT}
+      WRITE_DB_USERNAME: ${WRITE_DB_USERNAME}
+      WRITE_DB_PASSWORD: ${WRITE_DB_PASSWORD}
+      WRITE_DB_NAME: ${WRITE_DB_NAME}
+
+      CACHE_DB_HOST: redis
+      CACHE_DB_PORT: ${CACHE_DB_PORT}
+    depends_on:
+      - master
+      - slave
+      - redis
+
+  pgadmin:
+    image: dpage/pgadmin4
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_NAME}
+      PGADMIN_DEFAULT_EMAIL: ant.kov.vl@yandex.ru
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 15432:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - master
+
+  master:
+    container_name: master-postgres
+    image: bitnami/postgresql
+    environment:
+      POSTGRESQL_USERNAME: ${WRITE_DB_USERNAME}
+      POSTGRESQL_PASSWORD: ${WRITE_DB_PASSWORD}
+      POSTGRESQL_DATABASE: ${WRITE_DB_NAME}
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: replica
+      POSTGRESQL_REPLICATION_PASSWORD: replica_password
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${WRITE_DB_PORT}:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  slave:
+    container_name: slave-postgres
+    image: bitnami/postgresql
+    environment:
+      POSTGRESQL_USERNAME: ${READ_DB_USERNAME}
+      POSTGRESQL_PASSWORD: ${READ_DB_PASSWORD}
+
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_MASTER_PORT_NUMBER: ${WRITE_DB_PORT}
+      POSTGRESQL_MASTER_HOST: master
+      POSTGRESQL_REPLICATION_USER: replica
+      POSTGRESQL_REPLICATION_PASSWORD: replica_password
+    depends_on:
+      - master
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - ${CACHE_DB_PORT}:${CACHE_DB_PORT}
+    volumes:
+      - redisdata:/var/lib/redis
+
 volumes:
   pgdata:
+  pgadmin:
+  redisdata:

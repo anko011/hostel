@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { BookingFactory } from '@/bookings/application/factories';
-import { BookingPersistenceModule } from '@/bookings/infrastructure/persistence/';
 import { BookingHttpModule } from '@/bookings/presentation/http/';
 import {
   CreateBookingCommandHandler,
@@ -13,7 +12,9 @@ import {
   GetBookingByIdQueryHandler,
 } from '@/bookings/application/queries';
 
-const handlers = [
+import { BookingPersistenceModule } from '@/bookings/infrastructure/persistence/';
+
+export const handlers = [
   CreateBookingCommandHandler,
   UpdateBookingCommandHandler,
   DeleteBookingCommandHandler,
@@ -22,8 +23,8 @@ const handlers = [
 ];
 
 @Module({
-  imports: [BookingPersistenceModule.use('in-memory'), BookingHttpModule],
+  imports: [BookingPersistenceModule.register('postgres'), BookingHttpModule],
   providers: [BookingFactory, ...handlers],
-  exports: [BookingFactory, BookingPersistenceModule],
+  exports: [BookingPersistenceModule],
 })
 export class BookingsModule {}

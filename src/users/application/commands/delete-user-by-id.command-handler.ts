@@ -1,7 +1,7 @@
 import { CommandHandler, IQueryHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
-import { WriteUserRepository } from '@/users/application/ports/persistence';
+import { IWriteUsersRepository } from '@/users/application/ports/persistence';
 
 import { DeleteUserByIdCommand } from './delete-user-by-id.command';
 
@@ -11,7 +11,7 @@ export class DeleteUserByIdCommandHandler
 {
   private readonly logger = new Logger(DeleteUserByIdCommandHandler.name);
 
-  constructor(private readonly usersRepository: WriteUserRepository) {}
+  constructor(private readonly usersRepository: IWriteUsersRepository) {}
 
   execute(command: DeleteUserByIdCommand): Promise<any> {
     this.logger.log(`Process with command: ${JSON.stringify(command)}`);

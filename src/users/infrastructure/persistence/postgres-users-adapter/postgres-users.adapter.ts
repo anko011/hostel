@@ -2,28 +2,35 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
-  ReadUserRepository,
-  WriteUserRepository,
+  IReadUsersRepository,
+  IWriteUsersRepository,
 } from '@/users/application/ports/persistence';
 
 import { UserEntity } from './entities';
 import { UserMapper } from './mappers';
 import { ReadDbRepository } from './read-db.repository';
 import { WriteDbRepository } from './write-db.repository';
+import {
+  READ_DB_TOKEN,
+  WRITE_DB_TOKEN,
+} from '@/core/infrastructure/persistence';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity], READ_DB_TOKEN),
+    TypeOrmModule.forFeature([UserEntity], WRITE_DB_TOKEN),
+  ],
   providers: [
     UserMapper,
     {
-      provide: ReadUserRepository,
+      provide: IReadUsersRepository,
       useClass: ReadDbRepository,
     },
     {
-      provide: WriteUserRepository,
+      provide: IWriteUsersRepository,
       useClass: WriteDbRepository,
     },
   ],
-  exports: [ReadUserRepository, WriteUserRepository],
+  exports: [IReadUsersRepository, IWriteUsersRepository],
 })
-export class DbModule {}
+export class PostgresUsersAdapter {}

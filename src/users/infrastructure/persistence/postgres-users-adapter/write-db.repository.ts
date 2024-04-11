@@ -1,13 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { ReadDbRepository } from '@/users/infrastructure/persistence/db-users-adapter/read-db.repository';
-import { WriteUserRepository } from '@/users/application/ports/persistence';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { User } from '@/users/application/entities';
+import { IWriteUsersRepository } from '@/users/application/ports/persistence';
+
+import { WRITE_DB_TOKEN } from '@/core/infrastructure/persistence';
+
+import { UserEntity } from './entities';
+import { ReadDbRepository } from './read-db.repository';
+import { UserMapper } from './mappers';
 
 @Injectable()
 export class WriteDbRepository
   extends ReadDbRepository
-  implements WriteUserRepository
+  implements IWriteUsersRepository
 {
+  constructor(
+    @InjectRepository(UserEntity, WRITE_DB_TOKEN)
+    writeRepository: Repository<UserEntity>,
+    mapper: UserMapper,
+  ) {
+    super(writeRepository, mapper);
+  }
+
   async save(user: User): Promise<User> {
     const entity = this.userMapper.toPersistence(user);
     const newEntity = await this.userRepository.save(entity);

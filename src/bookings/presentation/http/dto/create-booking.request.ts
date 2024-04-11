@@ -27,6 +27,7 @@ export class CreateBookingRequest {
 
   @ApiProperty()
   @IsNumber()
+  @IsInt()
   @IsPositive()
   @IsNotEmpty()
   pricePerDay: number;

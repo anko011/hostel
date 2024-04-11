@@ -1,19 +1,28 @@
-import { User } from '@/users/application/entities';
-import { ReadUserRepository } from '@/users/application/ports/persistence';
-import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@/users/infrastructure/persistence/db-users-adapter/entities';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { UserMapper } from '@/users/infrastructure/persistence/db-users-adapter/mappers';
+
+import { User } from '@/users/application/entities';
+import { IReadUsersRepository } from '@/users/application/ports/persistence';
 import { NotExistUserException } from '@/users/application/exceptions';
 
+import { READ_DB_TOKEN } from '@/core/infrastructure/persistence';
+
+import { UserEntity } from './entities';
+import { UserMapper } from './mappers';
+
 @Injectable()
-export class ReadDbRepository implements ReadUserRepository {
+export class ReadDbRepository implements IReadUsersRepository {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, READ_DB_TOKEN)
     protected readonly userRepository: Repository<UserEntity>,
     protected readonly userMapper: UserMapper,
   ) {}
+
+  async findOneByLogin(login: string): Promise<User | null> {
+    const entity = await this.userRepository.findOneBy({ login });
+    return entity ? this.userMapper.toDomain(entity) : null;
+  }
 
   async findAll(): Promise<User[]> {
     const entities = await this.userRepository.find();
@@ -22,7 +31,7 @@ export class ReadDbRepository implements ReadUserRepository {
 
   async findOneById(id: string): Promise<User> {
     const entity = await this.userRepository.findOneBy({ id });
-    return this.userMapper.toDomain(entity);
+    return entity ? this.userMapper.toDomain(entity) : null;
   }
 
   async getOneById(id: string): Promise<User> {

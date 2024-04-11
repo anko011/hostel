@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 import { Booking } from '@/bookings/application/entities';
-import { BookingRepository } from '@/bookings/application/ports/persistence';
+import {
+  ReadBookingRepository,
+  WriteBookingRepository,
+} from '@/bookings/application/ports/persistence';
 import { NotExistsBookingException } from '@/bookings/application/exceptions';
 
 @Injectable()
-export class InMemoryRepository implements BookingRepository {
+export class InMemoryBookingRepository
+  implements ReadBookingRepository, WriteBookingRepository
+{
   private bookings: Booking[] = [];
 
   async save(booking: Booking): Promise<Booking> {
@@ -32,7 +37,7 @@ export class InMemoryRepository implements BookingRepository {
     return existing;
   }
 
-  async delete(id: Booking['id']): Promise<void> {
+  async remove(id: Booking['id']): Promise<void> {
     const existing = await this.findOneById(id);
     if (!existing)
       throw new NotExistsBookingException(

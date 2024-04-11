@@ -1,3 +1,1 @@
-export { UsersRepository } from './users.repository';
-
-export { ReadUserRepository, WriteUserRepository } from './users.repository';
+export { IReadUsersRepository, IWriteUsersRepository } from './users.repository';

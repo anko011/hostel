@@ -2,7 +2,7 @@ import { CommandHandler, IQueryHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
 import { User } from '@/users/application/entities';
-import { WriteUserRepository } from '@/users/application/ports/persistence/';
+import { IWriteUsersRepository } from '@/users/application/ports/persistence/';
 
 import { UpdateUserByIdCommand } from './update-user-by-id.command';
 
@@ -12,7 +12,7 @@ export class UpdateUserByIdCommandHandler
 {
   private readonly logger = new Logger(UpdateUserByIdCommandHandler.name);
 
-  constructor(private readonly usersRepository: WriteUserRepository) {}
+  constructor(private readonly usersRepository: IWriteUsersRepository) {}
 
   execute(command: UpdateUserByIdCommand): Promise<User> {
     this.logger.log(`Process with command: ${JSON.stringify(command)}`);

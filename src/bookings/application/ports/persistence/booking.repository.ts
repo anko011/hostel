@@ -1,15 +1,9 @@
 import { Booking } from '@/bookings/application/entities';
+import {
+  ReadRepository,
+  WriteRepository,
+} from '@/core/infrastructure/persistence';
 
-export abstract class BookingRepository {
-  abstract save(user: Booking): Promise<Booking>;
+export abstract class ReadBookingRepository extends ReadRepository<Booking> {}
 
-  abstract update(user: Pick<Booking, 'id'>): Promise<Booking>;
-
-  abstract findAll(): Promise<Booking[]>;
-
-  abstract findOneById(id: Booking['id']): Promise<Booking | null>;
-
-  abstract getOneById(id: Booking['id']): Promise<Booking>;
-
-  abstract delete(id: Booking['id']): Promise<void>;
-}
+export abstract class WriteBookingRepository extends WriteRepository<Booking> {}

@@ -24,8 +24,9 @@ import { Public } from '@/auth/presentation/http/decorators';
 import { Booking } from '@/bookings/application/entities';
 import { Roles } from '@/roles/presentation/http/decorators';
 import { Role } from '@/roles/application/entities/role';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Public()
+@ApiBearerAuth()
 @Controller('bookings')
 export class BookingController {
   constructor(
@@ -58,7 +59,7 @@ export class BookingController {
     }
   }
 
-  // @Roles(Role.MANAGER, Role.ADMIN)
+  @Roles(Role.MANAGER, Role.ADMIN)
   @Post()
   async create(@Body() createBookingDto: CreateBookingRequest) {
     try {
@@ -76,7 +77,7 @@ export class BookingController {
     }
   }
 
-  // @Roles(Role.MANAGER, Role.ADMIN)
+  @Roles(Role.MANAGER, Role.ADMIN)
   @Patch(':id')
   async update(
     @Param('id') id: string,

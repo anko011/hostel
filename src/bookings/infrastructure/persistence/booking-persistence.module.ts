@@ -1,17 +1,23 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-import { InMemoryModule } from '@/bookings/infrastructure/persistence/in-memory-booking-adapter/in-memory.module';
+import InMemoryBookingAdapter from './in-memory-booking-adapter';
+import PostgresBookingsAdapter from './postgres-booking-adapter';
 
 @Module({})
 export class BookingPersistenceModule {
-  private static readonly logger = new Logger(BookingPersistenceModule.name);
+  private static readonly adaptersModules = {
+    'in-memory': InMemoryBookingAdapter,
+    postgres: PostgresBookingsAdapter,
+  };
 
-  static use(driver: 'in-memory' | 'postgres'): DynamicModule {
-    BookingPersistenceModule.logger.log(`Started with driver: ${driver}`);
+  static register(adapter: 'in-memory' | 'postgres'): DynamicModule {
+    const adapterModule = BookingPersistenceModule.adaptersModules[adapter];
+
     return {
       module: BookingPersistenceModule,
-      imports: [InMemoryModule],
-      exports: [InMemoryModule],
+      imports: [ConfigModule, adapterModule],
+      exports: [adapterModule],
     };
   }
 }

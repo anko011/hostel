@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { SignUpCommand } from '@/auth/application/commands/sign-up.command';
-import { UsersRepository } from '@/users/application/ports/persistence/users.repository';
+import { IWriteUsersRepository } from '@/users/application/ports/persistence/users.repository';
 import { UserFactory } from '@/users/application/factories/user.factory';
 import { User } from '@/users/application/entities/user';
 import { ExistsUserException } from '@/auth/application/exceptions/exists-user.exception';
@@ -12,7 +12,7 @@ export class SignUpCommandHandler implements ICommandHandler<SignUpCommand> {
   private readonly logger = new Logger(SignUpCommandHandler.name);
 
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly usersRepository: IWriteUsersRepository,
     private readonly userFactory: UserFactory,
     private readonly tokenService: TokenService,
   ) {}

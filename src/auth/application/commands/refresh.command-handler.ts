@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
 import { TokenService } from '@/auth/application/shared/token';
-import { UsersRepository } from '@/users/application/ports/persistence';
+import { IWriteUsersRepository } from '@/users/application/ports/persistence';
 
 import { RefreshCommand } from './refresh.command';
 
@@ -12,7 +12,7 @@ export class RefreshCommandHandler implements ICommandHandler<RefreshCommand> {
 
   constructor(
     private readonly tokenService: TokenService,
-    private readonly usersRepository: UsersRepository,
+    private readonly usersRepository: IWriteUsersRepository,
   ) {}
 
   async execute(command: RefreshCommand): Promise<any> {

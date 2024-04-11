@@ -1,1 +1,4 @@
-export { BookingRepository } from './booking.repository';
+export {
+  ReadBookingRepository,
+  WriteBookingRepository,
+} from './booking.repository';

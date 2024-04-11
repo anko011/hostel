@@ -4,7 +4,7 @@ import { ConfigType } from '@nestjs/config';
 import TokenConfig from '@/auth/application/configs/token.config';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { User } from '@/users/application/entities/user';
-import { TokenRepository } from '@/auth/application/ports/persistence';
+import { ITokenRepository } from '@/auth/application/ports/persistence';
 
 @Injectable()
 export class TokenService {
@@ -13,7 +13,7 @@ export class TokenService {
   constructor(
     @Inject(TokenConfig.KEY)
     private readonly tokenConfig: ConfigType<typeof TokenConfig>,
-    private readonly tokenRepository: TokenRepository,
+    private readonly tokenRepository: ITokenRepository,
   ) {
     this.jwtService = new JwtService({
       secret: tokenConfig.tokenSecret,

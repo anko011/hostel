@@ -3,9 +3,9 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Booking } from '@/bookings/application/entities';
 import { BookingFactory } from '@/bookings/application/factories';
+import { WriteBookingRepository } from '@/bookings/application/ports/persistence';
 
 import { CreateBookingCommand } from './create-booking.command';
-import { BookingRepository } from '@/bookings/application/ports/persistence';
 
 @CommandHandler(CreateBookingCommand)
 export class CreateBookingCommandHandler
@@ -15,7 +15,7 @@ export class CreateBookingCommandHandler
 
   constructor(
     private readonly bookingFactory: BookingFactory,
-    private readonly bookingRepository: BookingRepository,
+    private readonly bookingRepository: WriteBookingRepository,
   ) {}
 
   async execute(command: CreateBookingCommand): Promise<Booking> {

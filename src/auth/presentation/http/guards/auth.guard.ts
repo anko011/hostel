@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { UsersRepository } from '@/users/application/ports/persistence/users.repository';
+import { IReadUsersRepository } from '@/users/application/ports/persistence/';
 
-import { TokenService } from 'src/auth/application/shared/token';
+import { TokenService } from '@/auth/application/shared/token';
 
 import { IS_PUBLIC_KEY } from '../decorators';
 
@@ -17,7 +17,7 @@ import { IS_PUBLIC_KEY } from '../decorators';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly tokenService: TokenService,
-    private readonly usersRepository: UsersRepository,
+    private readonly usersRepository: IReadUsersRepository,
     private readonly reflector: Reflector,
   ) {}
 

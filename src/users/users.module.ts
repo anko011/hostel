@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HashModule } from '@app/hash';
 
-import { UserFactory } from '@/users/application/factories/user.factory';
+import { UserFactory } from '@/users/application/factories/';
 import {
   GetAllUsersQueryHandler,
   GetUserByIdQueryHandler,
@@ -22,8 +22,12 @@ const handlers = [
 ];
 
 @Module({
-  imports: [UsersPersistenceModule.use('db'), UsersHttpModule, HashModule],
   providers: [UserFactory, ...handlers],
+  imports: [
+    UsersPersistenceModule.register('postgres'),
+    HashModule,
+    UsersHttpModule,
+  ],
   exports: [UserFactory, UsersPersistenceModule],
 })
 export class UsersModule {}

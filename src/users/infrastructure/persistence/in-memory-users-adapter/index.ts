@@ -1,1 +1,1 @@
-export { InMemoryModule } from './in-memory.module';
+export { InMemoryUsersAdapter } from './in-memory-users.adapter';

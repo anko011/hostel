@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 import { User } from '@/users/application/entities/user';
-import { UsersRepository } from '@/users/application/ports/persistence/';
+import {
+  IReadUsersRepository,
+  IWriteUsersRepository,
+} from '@/users/application/ports/persistence/';
 import { NotExistUserException } from '@/users/application/exceptions';
 
 @Injectable()
-export class InMemoryRepository implements UsersRepository {
+export class InMemoryUsersRepository
+  implements IReadUsersRepository, IWriteUsersRepository
+{
   private users: User[] = [];
 
   async save(user: User): Promise<User> {
